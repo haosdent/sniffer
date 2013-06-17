@@ -7,36 +7,16 @@
 #include <signal.h>
 #include <unistd.h>
 
-#include "list.h"
+#include "tools.h"
+
+#define OUTPUT "result_socket.txt"
 
 struct list_head* record_list;
-
-struct record {
-	uint32_t src_ip;
-	uint16_t src_port;
-	uint32_t dst_ip;
-	uint16_t dst_port;
-	uint32_t count;
-	struct list_head node;
-};
-
-uint32_t convert_ip(unsigned char *start)
-{
-	uint32_t result = 0;
-	int i;
-	for (i = 0; i < 4; i++) {
-		result *= 256;
-		result += *start;
-		start++;
-	};
-
-	return result;
-}
 
 void break_handler(int s)
 {
 	struct record *r;
-	FILE *fp = fopen("result.txt", "w");
+	FILE *fp = fopen(OUTPUT, "w");
 
 	if (fp == NULL) {
 		printf("Error when open result.txt.");
